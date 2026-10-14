@@ -1,6 +1,5 @@
 #BEBIDAS
-#Criterio: precio fijo de carta con el IVA ya incluido (como en cualquier bar).
-#Al hacer el ticket, el IVA se separa del total igual que con las pizzas.
+
 bebidas = {
     "agua": 1.20,
     "cola": 2.00,
@@ -24,4 +23,4 @@ def mostrarBebidas():
 
 
 
-        1234
+        
