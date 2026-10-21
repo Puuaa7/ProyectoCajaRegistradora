@@ -1,5 +1,5 @@
-#BEBIDAS
-
+#bebidas con su precio
+#el precio es fijo y ya lleva el iva incluido
 bebidas = {
     "agua": 1.20,
     "cola": 2.00,
@@ -12,11 +12,8 @@ bebidas = {
 }
 
 
-#Carta de bebidas
 def mostrarBebidas():
-    print()
-    print("----- BEBIDAS -----")
-    numero = 1
+    print("")
+    print("--- BEBIDAS ---")
     for nombre in bebidas:
-        print(f"{numero:>2}. {nombre:<20}{bebidas[nombre]:>6.2f} €")
-        numero = numero + 1
+        print(nombre, "-", bebidas[nombre], "€")
