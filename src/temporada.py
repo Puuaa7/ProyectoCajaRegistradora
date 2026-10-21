@@ -1,12 +1,16 @@
-# Prevision mensual segun la temporada.
+temporadas = ("baja", "media", "alta")
 
-def obtener_pizzas_estimadas(temporada):
+
+#pizzas que se venden al mes segun la temporada
+def obtenerPizzasEstimadas(temporada):
     match temporada:
         case "baja":
-            return 600
+            pizzas_estimadas_mes = 600
         case "media":
-            return 1000
+            pizzas_estimadas_mes = 1000
         case "alta":
-            return 1500
+            pizzas_estimadas_mes = 1500
         case _:
-            return 1000
+            pizzas_estimadas_mes = 1000
+
+    return pizzas_estimadas_mes

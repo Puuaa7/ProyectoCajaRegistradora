@@ -1,3 +1,6 @@
+#gastos de la pizzeria
+
+#luz, gas, agua, horno, cajas...
 gasto_suministros_por_pizza = 0.60
 gasto_personal_mensual = 4200
 gasto_alquiler_mensual = 1600
