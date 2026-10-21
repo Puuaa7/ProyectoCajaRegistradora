@@ -1,59 +1,111 @@
-from src.pizzas import pizzas
-from src.calculos import calcular_precio_venta
+#menu de la caja registradora
+
+from datetime import date
+
+from src.temporada import temporadas
+from src.pizzas import mostrarPizzas, mostrarDesglosePizza
+from src.bebidas import mostrarBebidas
+from src.carrito import agregarProductoCarrito, quitarProductoCarrito, mostrarCarrito, buscarProducto, esPizza
+from src.ofertas import mostrarOfertasDisponibles, mostrarDescuentosCarrito
+from src.ticket import mostrarTicket
+
+diasSemana = ("lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo")
 
 
-def mostrar_menu():
-    nombres_pizzas = list(pizzas)
-    temporada = "media"
-    opcion = -1
+def mostrarMenu(temporada, dia):
+    print("")
+    print("----- PIZZERIA PYTHON -----")
+    print("Temporada:", temporada, "- Dia:", dia)
+    print("1. Ver pizzas")
+    print("2. Ver bebidas")
+    print("3. Ver ofertas")
+    print("4. Añadir producto")
+    print("5. Quitar producto")
+    print("6. Ver carrito")
+    print("7. Pagar y ver ticket")
+    print("8. Ver como se calcula el precio de una pizza")
+    print("9. Cambiar temporada")
+    print("10. Cambiar dia")
+    print("0. Salir")
 
-    while opcion != 0:
-        print("\n--- CAJA REGISTRADORA ---")
-        print("1. Ver pizzas y precios")
-        print("2. Cambiar temporada")
-        print("0. Salir")
 
-        respuesta = input("Elige una opcion: ")
+def pedirTemporada():
+    temporada = input("Temporada (baja, media o alta): ").lower()
+    while temporada not in temporadas:
+        print("Esa temporada no existe")
+        temporada = input("Temporada (baja, media o alta): ").lower()
+    return temporada
 
-        if respuesta.isdigit():
-            opcion = int(respuesta)
-        else:
-            opcion = -1
 
-        if opcion == 1:
-            numero = 1
-            for nombre in nombres_pizzas:
-                print(numero, "-", nombre)
-                numero = numero + 1
+def pedirDia():
+    dia = input("Que dia es hoy? ").lower()
+    while dia not in diasSemana:
+        print("Ese dia no existe")
+        dia = input("Que dia es hoy? ").lower()
+    return dia
 
-            respuesta_pizza = input("Numero de la pizza: ")
 
-            if respuesta_pizza.isdigit():
-                numero_pizza = int(respuesta_pizza)
+def iniciarCaja():
+    carrito = []
+    temporada = pedirTemporada()
+    #dia de hoy (weekday da 0 el lunes, 1 el martes...)
+    dia = diasSemana[date.today().weekday()]
 
-                if numero_pizza >= 1 and numero_pizza <= len(nombres_pizzas):
-                    nombre = nombres_pizzas[numero_pizza - 1]
-                    resultado = calcular_precio_venta(nombre, temporada)
+    while True:
+        mostrarMenu(temporada, dia)
+        opcion = input("Elige una opcion: ")
 
-                    print("Pizza:", nombre)
-                    print("Coste ingredientes:", resultado["coste_ingredientes"], "EUR")
-                    print("Precio final:", resultado["precio_con_iva"], "EUR")
-                else:
-                    print("Pizza no valida")
+        if opcion == "1":
+            mostrarPizzas(temporada)
+
+        elif opcion == "2":
+            mostrarBebidas()
+
+        elif opcion == "3":
+            mostrarOfertasDisponibles()
+            if len(carrito) > 0:
+                print("")
+                print("Ofertas de tu pedido:")
+                mostrarDescuentosCarrito(carrito, temporada, dia)
+
+        elif opcion == "4":
+            producto = input("Que quieres añadir? ")
+            cantidad = input("Cuantas? ")
+            if cantidad.isdigit():
+                cantidad = int(cantidad)
             else:
-                print("Introduce un numero")
+                cantidad = 1
+            agregarProductoCarrito(carrito, producto, cantidad)
 
-        elif opcion == 2:
-            nueva_temporada = input("Temporada (baja/media/alta): ")
+        elif opcion == "5":
+            producto = input("Que quieres quitar? ")
+            quitarProductoCarrito(carrito, producto)
 
-            if nueva_temporada == "baja" or nueva_temporada == "media" or nueva_temporada == "alta":
-                temporada = nueva_temporada
-                print("Temporada:", temporada)
+        elif opcion == "6":
+            mostrarCarrito(carrito, temporada)
+            mostrarDescuentosCarrito(carrito, temporada, dia)
+
+        elif opcion == "7":
+            total = mostrarTicket(carrito, temporada, dia)
+            if total > 0:
+                carrito = []
+
+        elif opcion == "8":
+            pizza = buscarProducto(input("Que pizza? "))
+            if esPizza(pizza):
+                mostrarDesglosePizza(pizza, temporada)
             else:
-                print("Temporada no valida")
+                print("Esa pizza no existe")
 
-        elif opcion == 0:
-            print("Hasta pronto")
+        elif opcion == "9":
+            temporada = pedirTemporada()
+
+        elif opcion == "10":
+            dia = pedirDia()
+
+        elif opcion == "0":
+            print("Adios!")
+            break
 
         else:
-            print("Opcion no valida")
+            print("Opcion incorrecta")
