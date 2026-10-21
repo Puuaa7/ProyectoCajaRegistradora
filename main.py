@@ -1,8 +1,10 @@
-from src.menu import mostrar_menu
+#CAJA REGISTRADORA PIZZERIA
+
+from src.menu import iniciarCaja
 
 
 def main():
-    mostrar_menu()
+    iniciarCaja()
 
 
 if __name__ == "__main__":
