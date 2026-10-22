@@ -2,22 +2,6 @@
 
 Programa en Python que simula la caja registradora de una pizzería. Calcula el precio de las pizzas a partir de los ingredientes y los gastos del negocio, deja añadir pizzas y bebidas a un carrito, aplica ofertas y muestra un ticket con el IVA separado.
 
-Solo se usa Python (no hace falta instalar nada). Hace falta **Python 3.10 o superior** porque usamos `match`.
-
-## Cómo ejecutarlo
-
-Desde la carpeta del proyecto:
-
-```
-python main.py
-```
-
-Para pasar las pruebas:
-
-```
-python -m unittest tests.test_calculos
-```
-
 ## Estructura del proyecto
 
 ```
