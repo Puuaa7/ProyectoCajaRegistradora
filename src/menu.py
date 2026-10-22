@@ -30,15 +30,15 @@ def mostrarMenu(temporada, dia):
 
 
 def pedirTemporada():
-    temporada = input("Temporada (baja, media o alta): ").lower()
+    temporada = input("Temporada (baja, media o alta): ")
     while temporada not in temporadas:
         print("Esa temporada no existe")
-        temporada = input("Temporada (baja, media o alta): ").lower()
+        temporada = input("Temporada (baja, media o alta): ")
     return temporada
 
 
 def pedirDia():
-    dia = input("Que dia es hoy? ").lower()
+    dia = input("Que dia es hoy? ").lower() #lower sirve para mantener todo en minus.
     while dia not in diasSemana:
         print("Ese dia no existe")
         dia = input("Que dia es hoy? ").lower()
