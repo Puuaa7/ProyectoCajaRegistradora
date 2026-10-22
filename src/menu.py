@@ -71,11 +71,14 @@ def iniciarCaja():
         elif opcion == "4":
             producto = input("Que quieres añadir? ")
             cantidad = input("Cuantas? ")
-            if cantidad.isdigit():
+            if cantidad.isascii() and cantidad.isdigit():
                 cantidad = int(cantidad)
+                if cantidad > 0:
+                    agregarProductoCarrito(carrito, producto, cantidad)
+                else:
+                    print("La cantidad debe ser mayor a 0.")
             else:
-                cantidad = 1
-            agregarProductoCarrito(carrito, producto, cantidad)
+                print("Introduce un número entero, no se ha añadido nada")
 
         elif opcion == "5":
             producto = input("Que quieres quitar? ")
