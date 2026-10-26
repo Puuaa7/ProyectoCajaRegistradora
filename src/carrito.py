@@ -87,7 +87,6 @@ def calcularTotalCarrito(carrito, temporada):
         total = total + obtenerPrecioProducto(producto, temporada)
     return round(total, 2)
 
-
 #muestra los productos agrupados con su precio y el total
 def mostrarCarrito(carrito, temporada):
     print("")

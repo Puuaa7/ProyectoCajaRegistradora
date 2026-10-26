@@ -9,6 +9,7 @@ pizzas_2x1 = {"Margarita", "Prosciutto", "Hawaiana"}
 
 #oferta 1: 2x1 en algunas pizzas
 #se pueden mezclar (por ejemplo Margarita + Hawaiana), la mas barata sale gratis
+#esto funciona llamando a la funcion obtenerPrecioProducto para cada pizza del carrito, y sumando la mitad de las pizzas mas baratas
 def ofertaDosPorUno(carrito, temporada):
     precios = []
     for producto in carrito:
@@ -28,6 +29,7 @@ def ofertaDosPorUno(carrito, temporada):
 
 
 #oferta 2: menu pizza + bebida, 1 euro de descuento por cada menu
+#esta oferta funciona contando cuantas pizzas y cuantas bebidas hay en el carrito, y devolviendo el numero de menus que se pueden hacer (el minimo de ambos)
 def ofertaMenu(carrito, pizzasGratis):
     numPizzas = 0
     numBebidas = 0
@@ -51,6 +53,7 @@ def ofertaMenu(carrito, pizzasGratis):
 
 
 #oferta 3: los martes 20% de descuento en las pizzas
+#esta oferta funciona sumando el precio de todas las pizzas del carrito, y devolviendo el 20% de ese precio
 def ofertaMartes(carrito, temporada, dia, descuento2x1):
     if dia == "martes":
         totalPizzas = 0
