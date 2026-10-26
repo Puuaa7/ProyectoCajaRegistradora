@@ -1,10 +1,12 @@
 #ticket final
 
+#funciones necesarias para montar el ticket
 from src.carrito import contarProductos, obtenerPrecioProducto, esPizza, calcularTotalCarrito
 from src.ofertas import aplicarOferta
 from src.calculos import separarIva
 
 
+#imprime el ticket con productos, descuentos e iva y devuelve el total pagado
 def mostrarTicket(carrito, temporada, dia):
     if len(carrito) == 0:
         print("El carrito esta vacio")
@@ -35,6 +37,7 @@ def mostrarTicket(carrito, temporada, dia):
             print(f"- {descuento[0]}: -{descuento[1]} €")
             total = total - descuento[1]
 
+    #total final y su desglose de iva
     total = round(total, 2)
     base_imponible, importe_iva = separarIva(total)
 

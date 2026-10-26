@@ -1,6 +1,7 @@
+#temporadas posibles
 temporadas = ("baja", "media", "alta")
 
-#pizzas que se venden al mes
+#pizzas que se venden al mes segun la temporada
 def obtenerPizzasEstimadas(temporada):
     if temporada == "baja":
         return 600

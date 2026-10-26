@@ -1,5 +1,6 @@
 #ofertas de la pizzeria
 
+#funciones del carrito que necesitamos para calcular las ofertas
 from src.carrito import esPizza, esBebida, obtenerPrecioProducto, calcularTotalCarrito
 
 #pizzas que tienen 2x1 (es un conjunto)
@@ -17,6 +18,7 @@ def ofertaDosPorUno(carrito, temporada):
     #ordenamos de mas barata a mas cara
     precios.sort()
 
+    #la mitad de las pizzas salen gratis (las mas baratas)
     pizzasGratis = len(precios) // 2
     descuento = 0
     for i in range(pizzasGratis):
@@ -39,6 +41,7 @@ def ofertaMenu(carrito, pizzasGratis):
     #las pizzas gratis del 2x1 no cuentan
     numPizzas = numPizzas - pizzasGratis
 
+    #cada menu necesita una pizza y una bebida
     if numPizzas < numBebidas:
         menus = numPizzas
     else:
@@ -54,6 +57,7 @@ def ofertaMartes(carrito, temporada, dia, descuento2x1):
         for producto in carrito:
             if esPizza(producto):
                 totalPizzas = totalPizzas + obtenerPrecioProducto(producto, temporada)
+        #no aplicamos el 20% a las pizzas que ya salen gratis
         totalPizzas = totalPizzas - descuento2x1
         return round(totalPizzas * 0.20, 2)
     return 0
@@ -114,6 +118,7 @@ def mostrarDescuentosCarrito(carrito, temporada, dia):
     print("Total con ofertas:", round(total, 2), "€")
 
 
+#muestra la lista de ofertas de la pizzeria
 def mostrarOfertasDisponibles():
     print("")
     print("--- OFERTAS ---")

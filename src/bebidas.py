@@ -12,6 +12,7 @@ bebidas = {
 }
 
 
+#muestra todas las bebidas con su precio
 def mostrarBebidas():
     print("")
     print("--- BEBIDAS ---")

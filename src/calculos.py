@@ -20,11 +20,13 @@ def calcularCosteTotal(coste_ingredientes, temporada):
     return coste_total_pizza
 
 
+#aplica el margen de beneficio al coste
 def calcularPrecioSinIva(coste_total_pizza):
     precio_sin_iva = coste_total_pizza * margen_beneficio_pizza
     return precio_sin_iva
 
 
+#suma el iva al precio y lo redondea a 2 decimales
 def calcularPrecioConIva(precio_sin_iva):
     precio_con_iva = precio_sin_iva * (1 + iva)
     return round(precio_con_iva, 2)

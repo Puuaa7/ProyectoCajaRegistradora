@@ -1,3 +1,4 @@
+#funciones para calcular costes y precios
 from src.ingredientes import calcularPrecioIngrediente
 from src.calculos import calcularCosteFijoPorPizza, calcularCosteTotal, calcularPrecioSinIva, calcularPrecioConIva
 from src.gastos import gasto_suministros_por_pizza
@@ -206,6 +207,7 @@ def mostrarPizzas(temporada):
     for nombre in pizzas:
         precio = calcularPrecioPizza(nombre, temporada)
 
+        #juntamos los ingredientes en un texto
         textoIngredientes = ""
         for ingrediente in pizzas[nombre]:
             textoIngredientes = textoIngredientes + ingrediente + " "

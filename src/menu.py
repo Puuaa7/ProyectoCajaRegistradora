@@ -1,5 +1,6 @@
 #menu de la caja registradora
 
+#date sirve para saber el dia de hoy
 from datetime import date
 
 from src.temporada import temporadas
@@ -9,9 +10,11 @@ from src.carrito import agregarProductoCarrito, quitarProductoCarrito, mostrarCa
 from src.ofertas import mostrarOfertasDisponibles, mostrarDescuentosCarrito
 from src.ticket import mostrarTicket
 
+#dias validos (tupla porque no cambian)
 diasSemana = ("lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo")
 
 
+#imprime las opciones del menu principal
 def mostrarMenu(temporada, dia):
     print("")
     print("----- PIZZERIA PYTHON -----")
@@ -29,6 +32,7 @@ def mostrarMenu(temporada, dia):
     print("0. Salir")
 
 
+#pide la temporada hasta que sea valida
 def pedirTemporada():
     temporada = input("Temporada (baja, media o alta): ")
     while temporada not in temporadas:
@@ -37,6 +41,7 @@ def pedirTemporada():
     return temporada
 
 
+#pide el dia hasta que sea valido
 def pedirDia():
     dia = input("Que dia es hoy? ").lower() #lower sirve para mantener todo en minus.
     while dia not in diasSemana:
@@ -45,6 +50,7 @@ def pedirDia():
     return dia
 
 
+#bucle principal de la caja: muestra el menu y ejecuta la opcion elegida
 def iniciarCaja():
     carrito = []
     temporada = pedirTemporada()
@@ -70,6 +76,7 @@ def iniciarCaja():
 
         elif opcion == "4":
             producto = input("Que quieres añadir? ")
+            #comprobamos que la cantidad sea un numero entero positivo
             cantidad = input("Cuantas? ")
             if cantidad.isascii() and cantidad.isdigit():
                 cantidad = int(cantidad)
@@ -90,6 +97,7 @@ def iniciarCaja():
 
         elif opcion == "7":
             total = mostrarTicket(carrito, temporada, dia)
+            #si se ha pagado, vaciamos el carrito
             if total > 0:
                 carrito = []
 

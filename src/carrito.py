@@ -1,6 +1,7 @@
 #carrito de la compra
 #es una lista con los nombres de los productos, por ejemplo ["Margarita", "cola"]
 
+#importamos las pizzas y bebidas para buscar productos y precios
 from src.pizzas import pizzas, calcularPrecioPizza
 from src.bebidas import bebidas
 
@@ -21,18 +22,21 @@ def buscarProducto(texto):
     return ""
 
 
+#devuelve True si el producto es una pizza
 def esPizza(producto):
     if producto in pizzas:
         return True
     return False
 
 
+#devuelve True si el producto es una bebida
 def esBebida(producto):
     if producto in bebidas:
         return True
     return False
 
 
+#precio de un producto (pizza calculada o bebida fija), 0 si no existe
 def obtenerPrecioProducto(producto, temporada):
     if esPizza(producto):
         return calcularPrecioPizza(producto, temporada)
@@ -42,6 +46,7 @@ def obtenerPrecioProducto(producto, temporada):
         return 0
 
 
+#añade un producto al carrito tantas veces como la cantidad
 def agregarProductoCarrito(carrito, texto, cantidad):
     producto = buscarProducto(texto)
 
@@ -53,6 +58,7 @@ def agregarProductoCarrito(carrito, texto, cantidad):
         print("Se ha añadido", cantidad, producto)
 
 
+#quita una unidad del producto del carrito
 def quitarProductoCarrito(carrito, texto):
     producto = buscarProducto(texto)
 
@@ -74,6 +80,7 @@ def contarProductos(carrito):
     return cantidades
 
 
+#suma el precio de todo el carrito (sin ofertas)
 def calcularTotalCarrito(carrito, temporada):
     total = 0
     for producto in carrito:
@@ -81,6 +88,7 @@ def calcularTotalCarrito(carrito, temporada):
     return round(total, 2)
 
 
+#muestra los productos agrupados con su precio y el total
 def mostrarCarrito(carrito, temporada):
     print("")
     print("--- CARRITO ---")
