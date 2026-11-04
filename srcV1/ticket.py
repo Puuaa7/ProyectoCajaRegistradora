@@ -1,9 +1,9 @@
 #ticket final
 
 #funciones necesarias para montar el ticket
-from src.carrito import contarProductos, obtenerPrecioProducto, esPizza, calcularTotalCarrito
-from src.ofertas import aplicarOferta
-from src.calculos import separarIva
+from srcV1.carrito import contarProductos, obtenerPrecioProducto, esPizza, calcularTotalCarrito
+from srcV1.ofertas import aplicarOferta
+from srcV1.calculos import separarIva
 
 
 #imprime el ticket con productos, descuentos e iva y devuelve el total pagado

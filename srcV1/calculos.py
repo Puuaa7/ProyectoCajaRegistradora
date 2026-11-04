@@ -1,8 +1,8 @@
 #Cálculo del precio de una pizza
 
-from src.gastos import gasto_suministros_por_pizza, gasto_personal_mensual, gasto_alquiler_mensual, iva
-from src.margenes import margen_beneficio_pizza
-from src.temporada import obtenerPizzasEstimadas
+from srcV1.gastos import gasto_suministros_por_pizza, gasto_personal_mensual, gasto_alquiler_mensual, iva
+from srcV1.margenes import margen_beneficio_pizza
+from srcV1.temporada import obtenerPizzasEstimadas
 
 
 #gastos fijos (personal + alquiler) que le tocan a cada pizza

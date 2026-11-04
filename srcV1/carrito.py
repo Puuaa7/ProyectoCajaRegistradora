@@ -2,8 +2,8 @@
 #es una lista con los nombres de los productos, por ejemplo ["Margarita", "cola"]
 
 #importamos las pizzas y bebidas para buscar productos y precios
-from src.pizzas import pizzas, calcularPrecioPizza
-from src.bebidas import bebidas
+from srcV1.pizzas import pizzas, calcularPrecioPizza
+from srcV1.bebidas import bebidas
 
 
 #busca el producto aunque lo escribas en minusculas

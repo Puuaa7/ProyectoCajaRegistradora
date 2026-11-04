@@ -1,7 +1,7 @@
 #funciones para calcular costes y precios
-from src.ingredientes import calcularPrecioIngrediente
-from src.calculos import calcularCosteFijoPorPizza, calcularCosteTotal, calcularPrecioSinIva, calcularPrecioConIva
-from src.gastos import gasto_suministros_por_pizza
+from srcV1.ingredientes import calcularPrecioIngrediente
+from srcV1.calculos import calcularCosteFijoPorPizza, calcularCosteTotal, calcularPrecioSinIva, calcularPrecioConIva
+from srcV1.gastos import gasto_suministros_por_pizza
 
 #1. PIZZAS Y SUS INGREDIENTES (gramos por ingrediente)
 pizzas = {

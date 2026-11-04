@@ -3,12 +3,12 @@
 #date sirve para saber el dia de hoy
 from datetime import date
 
-from src.temporada import temporadas
-from src.pizzas import mostrarPizzas, mostrarDesglosePizza
-from src.bebidas import mostrarBebidas
-from src.carrito import agregarProductoCarrito, quitarProductoCarrito, mostrarCarrito, buscarProducto, esPizza
-from src.ofertas import mostrarOfertasDisponibles, mostrarDescuentosCarrito
-from src.ticket import mostrarTicket
+from srcV1.temporada import temporadas
+from srcV1.pizzas import mostrarPizzas, mostrarDesglosePizza
+from srcV1.bebidas import mostrarBebidas
+from srcV1.carrito import agregarProductoCarrito, quitarProductoCarrito, mostrarCarrito, buscarProducto, esPizza
+from srcV1.ofertas import mostrarOfertasDisponibles, mostrarDescuentosCarrito
+from srcV1.ticket import mostrarTicket
 
 #dias validos (tupla porque no cambian)
 diasSemana = ("lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo")
