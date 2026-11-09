@@ -1,7 +1,7 @@
 #ofertas de la pizzeria
 
 #funciones del carrito que necesitamos para calcular las ofertas
-from src.carrito import esPizza, esBebida, obtenerPrecioProducto, calcularTotalCarrito
+from srcV1.carrito import esPizza, esBebida, obtenerPrecioProducto, calcularTotalCarrito
 
 #pizzas que tienen 2x1 (es un conjunto)
 pizzas_2x1 = {"Margarita", "Prosciutto", "Hawaiana"}
