@@ -4,16 +4,14 @@
 from srcV2.temporada import Temporada, obtenerTemporada
 #los gastos de la pizzeria (suministros, personal, alquiler e iva)
 from srcV2.gastos2 import gastos as gastosPizzeria
-
-#margen de la pizzeria
-#(cuando exista margenes2 se puede coger de ahi)
-MARGEN_BENEFICIO = 1.35
+#el margen de beneficio
+from srcV2.margenes2 import margen as margenPizzeria
 
 
 class Calculadora:
-    #la calculadora guarda los gastos (objeto Gastos) y el margen con los que calcula
+    #la calculadora guarda los gastos (objeto Gastos) y el margen (objeto Margen) con los que calcula
     #las pizzas que se venden al mes las coge de la clase Temporada
-    def __init__(self, gastos=gastosPizzeria, margen=MARGEN_BENEFICIO):
+    def __init__(self, gastos=gastosPizzeria, margen=margenPizzeria):
         self.gastos = gastos
         self.margen = margen
 
@@ -34,7 +32,7 @@ class Calculadora:
 
     #aplica el margen de beneficio al coste
     def precioSinIva(self, costeTotal):
-        return costeTotal * self.margen
+        return self.margen.aplicar(costeTotal)
 
     #suma el iva al precio y lo redondea a 2 decimales
     def precioConIva(self, precioSinIva):
