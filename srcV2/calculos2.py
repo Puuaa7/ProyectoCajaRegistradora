@@ -2,25 +2,19 @@
 
 #las temporadas (y las pizzas que se venden al mes en cada una)
 from srcV2.temporada import Temporada, obtenerTemporada
+#los gastos de la pizzeria (suministros, personal, alquiler e iva)
+from srcV2.gastos2 import gastos as gastosPizzeria
 
-#gastos, iva y margen de la pizzeria
-#(cuando existan gastos2 y margenes2 se pueden coger de ahi)
-SUMINISTROS_POR_PIZZA = 0.60
-PERSONAL_MENSUAL = 4200
-ALQUILER_MENSUAL = 1600
-IVA = 0.10
+#margen de la pizzeria
+#(cuando exista margenes2 se puede coger de ahi)
 MARGEN_BENEFICIO = 1.35
 
 
 class Calculadora:
-    #la calculadora guarda los gastos, el iva y el margen con los que calcula
+    #la calculadora guarda los gastos (objeto Gastos) y el margen con los que calcula
     #las pizzas que se venden al mes las coge de la clase Temporada
-    def __init__(self, suministrosPorPizza=SUMINISTROS_POR_PIZZA, personalMensual=PERSONAL_MENSUAL,
-                 alquilerMensual=ALQUILER_MENSUAL, iva=IVA, margen=MARGEN_BENEFICIO):
-        self.suministrosPorPizza = suministrosPorPizza
-        self.personalMensual = personalMensual
-        self.alquilerMensual = alquilerMensual
-        self.iva = iva
+    def __init__(self, gastos=gastosPizzeria, margen=MARGEN_BENEFICIO):
+        self.gastos = gastos
         self.margen = margen
 
     #pizzas que se venden al mes en esa temporada
@@ -32,12 +26,11 @@ class Calculadora:
 
     #gastos fijos (personal + alquiler) que le tocan a cada pizza
     def costeFijoPorPizza(self, temporada):
-        gastosFijos = self.personalMensual + self.alquilerMensual
-        return gastosFijos / self.pizzasDelMes(temporada)
+        return self.gastos.gastosFijosMensuales() / self.pizzasDelMes(temporada)
 
     #lo que nos cuesta hacer la pizza
     def costeTotal(self, costeIngredientes, temporada):
-        return costeIngredientes + self.suministrosPorPizza + self.costeFijoPorPizza(temporada)
+        return costeIngredientes + self.gastos.suministrosPorPizza + self.costeFijoPorPizza(temporada)
 
     #aplica el margen de beneficio al coste
     def precioSinIva(self, costeTotal):
@@ -45,7 +38,7 @@ class Calculadora:
 
     #suma el iva al precio y lo redondea a 2 decimales
     def precioConIva(self, precioSinIva):
-        return round(precioSinIva * (1 + self.iva), 2)
+        return round(precioSinIva * (1 + self.gastos.iva), 2)
 
     #todo seguido: de coste de ingredientes a precio final
     def precioFinal(self, costeIngredientes, temporada):
@@ -54,7 +47,7 @@ class Calculadora:
 
     #separa el total en base imponible e iva
     def separarIva(self, total):
-        baseImponible = round(total / (1 + self.iva), 2)
+        baseImponible = round(total / (1 + self.gastos.iva), 2)
         importeIva = round(total - baseImponible, 2)
         return baseImponible, importeIva
 

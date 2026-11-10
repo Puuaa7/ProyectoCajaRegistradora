@@ -41,7 +41,7 @@ class Pizza:
         print("")
         print("Precio de la pizza", self.nombre)
         print(f"Ingredientes: {costeIngredientes:.2f} €")
-        print(f"Suministros: {calculadora.suministrosPorPizza:.2f} €")
+        print(f"Suministros: {calculadora.gastos.suministrosPorPizza:.2f} €")
         print(f"Gastos fijos: {costeFijo:.2f} €")
         print(f"Coste total: {costeTotal:.2f} €")
         print(f"Beneficio: {precioSinIva - costeTotal:.2f} €")

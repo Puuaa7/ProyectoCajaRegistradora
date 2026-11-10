@@ -1,6 +1,7 @@
 import unittest
 from srcV2.calculos2 import Calculadora, calculadora
 from srcV2.temporada import Temporada, media
+from srcV2.gastos2 import Gastos
 from srcV1.pizzas import pizzas, calcularCosteIngredientes, calcularPrecioPizza
 
 
@@ -33,7 +34,7 @@ class TestCalculadora(unittest.TestCase):
                                  calcularPrecioPizza(nombre, temporada))
 
     def test_otra_calculadora(self):
-        sinIva = Calculadora(iva=0)
+        sinIva = Calculadora(gastos=Gastos(iva=0))
         self.assertEqual(sinIva.separarIva(10), (10, 0))
 
 
