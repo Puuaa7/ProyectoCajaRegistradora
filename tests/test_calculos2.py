@@ -1,5 +1,6 @@
 import unittest
 from srcV2.calculos2 import Calculadora, calculadora
+from srcV2.temporada import Temporada, media
 from srcV1.pizzas import pizzas, calcularCosteIngredientes, calcularPrecioPizza
 
 
@@ -14,6 +15,15 @@ class TestCalculadora(unittest.TestCase):
     def test_temporada_incorrecta(self):
         with self.assertRaises(ValueError):
             calculadora.pizzasDelMes("otra")
+
+    def test_acepta_objeto_temporada(self):
+        self.assertEqual(calculadora.pizzasDelMes(media), 1000)
+        self.assertEqual(calculadora.costeFijoPorPizza(media), calculadora.costeFijoPorPizza("media"))
+
+    def test_temporada_nueva(self):
+        #una temporada inventada con 2900 pizzas: (4200 + 1600) / 2900 = 2 euros por pizza
+        festival = Temporada("festival", 2900)
+        self.assertEqual(calculadora.costeFijoPorPizza(festival), 2)
 
     def test_mismo_precio_que_v1(self):
         for nombre in pizzas:
