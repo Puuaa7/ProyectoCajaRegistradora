@@ -30,13 +30,14 @@ Dia 2 "10/11/2026"
     6.Se ha cambiado "main.py" para que pregunte al principio si se quiere usar la versión 1 o la versión 2.
     7.Se han arreglado las pruebas de la versión 1, que todavía importaban de "src", y una prueba de la temporada que esperaba un resultado que el código no da.
     8.Se ha cambiado la Calculadora para que use la clase Temporada de Pau en vez de tener las 600, 1000 y 1500 pizzas repetidas.
-    9.Se ha actualizado el README con las dos versiones, las clases de la versión 2 y cómo lanzar las pruebas. También se ha escrito en "docsV2/log_version2.md" un log con lo que se ha hecho en cada rama, junto con el de la temporada de Pau.
-    10.Pruebas: cada clase de la versión 2 tiene su archivo de pruebas, y muchas pruebas comparan el resultado con la versión 1 para asegurarnos de que las dos dan los mismos precios. Por ejemplo, las ofertas se prueban con 300 carritos al azar. También hay pruebas que simulan a una persona usando el menú. En total pasan 49 pruebas, que se lanzan todas con: python -m unittest discover -s tests -t .
+    9.Se han hecho las clases Gastos ("gastos2.py") y Margen ("margenes2.py"), que eran las dos piezas de la versión 1 que todavía no tenían archivo en la versión 2. Antes sus números estaban dentro de la Calculadora; ahora la Calculadora recibe un objeto Gastos y un objeto Margen.
+    10.Se ha actualizado el README con las dos versiones, las clases de la versión 2 y cómo lanzar las pruebas. También se ha escrito en "docsV2/log_version2.md" un log con lo que se ha hecho en cada rama, junto con el de la temporada de Pau.
+    11.Pruebas: cada clase de la versión 2 tiene su archivo de pruebas, y muchas pruebas comparan el resultado con la versión 1 para asegurarnos de que las dos dan los mismos precios. Por ejemplo, las ofertas se prueban con 300 carritos al azar. También hay pruebas que simulan a una persona usando el menú. En total pasan 56 pruebas, que se lanzan todas con: python -m unittest discover -s tests -t .
 
 
 Qué hemos aprendido con la versión 2
 
     1.Una clase junta los datos y lo que se puede hacer con ellos. En la versión 1, para saber el precio de una pizza había que llamar a calcularPrecioPizza("Margarita", temporada). En la versión 2 la pizza lo sabe calcular sola: pizzas["Margarita"].precio(temporada).
     2.Si dos clases tienen los mismos métodos (como Pizza y Bebida), el resto del programa las puede usar igual sin saber cuál es cuál. Esto ha hecho el carrito y el ticket más sencillos.
-    3.Guardar los números en atributos (en la Calculadora y en las Ofertas) permite crear objetos con otros valores, por ejemplo Calculadora(iva=0.21) u Ofertas(diaDescuento="lunes"), sin cambiar el código.
+    3.Guardar los números en atributos (en los Gastos, el Margen y las Ofertas) permite crear objetos con otros valores, por ejemplo Calculadora(gastos=Gastos(iva=0.21)) u Ofertas(diaDescuento="lunes"), sin cambiar el código. Además, un objeto puede usar otros: la Calculadora usa un objeto Gastos, un objeto Margen y las Temporadas.
     4.Hacer una rama por cada parte, con su commit y juntándola con "version2" en cuanto está lista, ha funcionado mucho mejor que en la versión 1, donde lo juntamos todo al final. Hay que fijarse bien en la rama de destino de los Pull Requests ("version2" y no "main").

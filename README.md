@@ -43,7 +43,9 @@ srcV2/                   -> versión 2 (clases)
   pizzas2.py             -> clase Pizza
   bebidas2.py            -> clase Bebida
   temporada.py           -> clase Temporada
-  calculos2.py           -> clase Calculadora (gastos, margen e IVA)
+  gastos2.py             -> clase Gastos (suministros, personal, alquiler e IVA)
+  margenes2.py           -> clase Margen (margen de beneficio)
+  calculos2.py           -> clase Calculadora
   carrito2.py            -> clase Carrito
   ofertas2.py            -> clase Ofertas
   ticket2.py             -> clase Ticket
@@ -86,20 +88,23 @@ docsV2/                  -> notas de la versión 2
 | pizzas2.py | `Pizza` | `nombre`, `receta` | `costeIngredientes()`, `precio(temporada)`, `nombreTicket()`, `mostrarDesglose(temporada)` |
 | bebidas2.py | `Bebida` | `nombre`, `precioFijo` | `precio(temporada)`, `nombreTicket()` |
 | temporada.py | `Temporada` | `nombre`, `pizzasEstimadas` | `obtenerPizzasEstimadas()` |
-| calculos2.py | `Calculadora` | `suministrosPorPizza`, `personalMensual`, `alquilerMensual`, `iva`, `margen` | `pizzasDelMes`, `costeFijoPorPizza`, `costeTotal`, `precioSinIva`, `precioConIva`, `precioFinal`, `separarIva` |
+| gastos2.py | `Gastos` | `suministrosPorPizza`, `personalMensual`, `alquilerMensual`, `iva` | `gastosFijosMensuales()` |
+| margenes2.py | `Margen` | `beneficio` | `aplicar(coste)`, `porcentaje()` |
+| calculos2.py | `Calculadora` | `gastos` (objeto `Gastos`), `margen` (objeto `Margen`) | `pizzasDelMes`, `costeFijoPorPizza`, `costeTotal`, `precioSinIva`, `precioConIva`, `precioFinal`, `separarIva` |
 | carrito2.py | `Carrito` | `productos` | `agregar`, `quitar`, `vaciar`, `estaVacio`, `pizzas`, `bebidas`, `contarProductos`, `total(temporada)`, `mostrar(temporada)` |
 | ofertas2.py | `Ofertas` | `pizzas2x1`, `descuentoMenu`, `diaDescuento`, `porcentajeDia`, `minimoPedido`, `porcentajePedido` | `dosPorUno`, `menu`, `descuentoDelDia`, `pedidoGrande`, `aplicar(carrito, temporada, dia)`, `mostrarDescuentos`, `mostrarDisponibles` |
 | ticket2.py | `Ticket` | `carrito`, `temporada`, `dia`, `ofertas` | `mostrar()` |
 | menu2.py | `Caja` | `carrito`, `temporada`, `dia`, `ofertas` | un método por opción del menú e `iniciar()` |
 
-Cada archivo crea también los objetos que usa el resto del programa: el diccionario `ingredientes` con un `Ingrediente` por ingrediente, `pizzas` con una `Pizza` por receta, `bebidas`, las temporadas `baja`, `media` y `alta`, y los objetos `calculadora` y `ofertas`.
+Cada archivo crea también los objetos que usa el resto del programa: el diccionario `ingredientes` con un `Ingrediente` por ingrediente, `pizzas` con una `Pizza` por receta, `bebidas`, las temporadas `baja`, `media` y `alta`, y los objetos `gastos`, `margen`, `calculadora` y `ofertas`.
 
 ### Qué cambia respecto a la versión 1
 
 - **Los datos van con su comportamiento.** En la v1 el precio de una pizza se calcula con `calcularPrecioPizza("Margarita", temporada)`. En la v2 la pizza sabe calcularlo: `pizzas["Margarita"].precio(temporada)`.
 - **Pizzas y bebidas se usan igual.** Las dos clases tienen `precio(temporada)` y `nombreTicket()`, así que el carrito y el ticket no necesitan saber si un producto es pizza o bebida para sumarlo o imprimirlo. La bebida simplemente ignora la temporada.
 - **El carrito es un objeto.** En vez de una lista que se pasa a todas las funciones, el `Carrito` guarda sus productos y tiene métodos para añadir, quitar, contar y sumar.
-- **Los números se pueden cambiar sin tocar el código.** La `Calculadora` y las `Ofertas` guardan sus valores como atributos. Por ejemplo, `Ofertas(diaDescuento="lunes")` pone el descuento del día los lunes, y `Calculadora(iva=0.21)` calcula con otro IVA.
+- **Los números se pueden cambiar sin tocar el código.** Los `Gastos`, el `Margen` y las `Ofertas` guardan sus valores como atributos. Por ejemplo, `Ofertas(diaDescuento="lunes")` pone el descuento del día los lunes, y `Calculadora(gastos=Gastos(iva=0.21))` calcula con otro IVA.
+- **Unos objetos usan otros.** La `Calculadora` no tiene los números dentro: recibe un objeto `Gastos` y un objeto `Margen`, y coge las pizzas al mes de la `Temporada`.
 - **Las temporadas son objetos.** La `Calculadora` coge las pizzas al mes de la clase `Temporada`, así que una temporada nueva como `Temporada("festival", 2900)` funciona sin cambiar nada más.
 
 ## Ofertas

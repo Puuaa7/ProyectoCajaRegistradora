@@ -54,6 +54,14 @@ Se ha creado la rama version2_tests a partir de version2. Se ha arreglado tests/
 
 Se ha cambiado la Calculadora para que coja las pizzas que se venden al mes de la clase Temporada (srcV2/temporada.py) en vez de tener su propia tabla repetida. Ahora acepta un objeto Temporada o su nombre ("baja", "media" o "alta"). Se han añadido pruebas con un objeto Temporada y con una temporada nueva.
 
+### Gastos (version2_src_gastos)
+
+Se ha creado la rama version2_src_gastos a partir de version2. Se ha creado srcV2/gastos2.py con la clase Gastos (suministros por pizza, personal, alquiler e IVA) y el método gastosFijosMensuales(). La Calculadora ahora recibe un objeto Gastos en vez de tener esos números dentro. La prueba comprueba que los gastos son los mismos que en la v1.
+
+### Margen (version2_src_margenes)
+
+Se ha creado la rama version2_src_margenes a partir de version2. Se ha creado srcV2/margenes2.py con la clase Margen (el 35% de beneficio) y los métodos aplicar(coste) y porcentaje(). La Calculadora ahora recibe un objeto Margen en vez de un número. La prueba comprueba que el margen es el mismo que en la v1.
+
 ### README (version2_readme)
 
 Se ha creado la rama version2_readme a partir de version2. Se ha actualizado el README: cómo se elige la versión al arrancar, la estructura con srcV1 y srcV2, una tabla con las clases de la v2, qué cambia respecto a la v1 y cómo lanzar las pruebas.
