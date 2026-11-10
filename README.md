@@ -2,35 +2,67 @@
 
 Programa en Python que simula la caja registradora de una pizzería. Calcula el precio de las pizzas a partir de los ingredientes y los gastos del negocio, deja añadir pizzas y bebidas a un carrito, aplica ofertas y muestra un ticket con el IVA separado.
 
+## Cómo se usa
+
+```
+python main.py
+```
+
+Al arrancar, el programa pregunta qué versión quieres usar:
+
+```
+----- CAJA REGISTRADORA PIZZERIA -----
+1. Version 1 (funciones)
+2. Version 2 (clases y objetos)
+Que version quieres usar?
+```
+
+Las dos versiones hacen lo mismo y dan los mismos precios. La diferencia está en cómo está escrito el código:
+
+- **Versión 1** (`srcV1/`): funciones sueltas y datos en diccionarios y listas.
+- **Versión 2** (`srcV2/`): clases y objetos. Cada cosa de la pizzería (ingrediente, pizza, bebida, carrito, ofertas, ticket, caja) es una clase con sus datos y sus métodos.
+
 ## Estructura del proyecto
 
 ```
-main.py              -> arranca el programa
-src/
-  ingredientes.py    -> ingredientes y su precio por kg
-  pizzas.py          -> las 21 pizzas con los gramos de cada ingrediente
-  gastos.py          -> suministros, personal, alquiler e IVA
-  margenes.py        -> margen de beneficio
-  temporada.py       -> pizzas que se venden al mes según la temporada
-  calculos.py        -> cálculo del precio de una pizza y del IVA
-  bebidas.py         -> carta de bebidas
-  carrito.py         -> añadir, quitar y ver productos del carrito
-  ofertas.py         -> las 4 ofertas
-  ticket.py          -> ticket final
-  menu.py            -> menú de la caja
-tests/
-  test_calculos.py   -> pruebas
-docs/                -> memoria y enunciado
+main.py                  -> pregunta la versión y arranca el programa
+srcV1/                   -> versión 1 (funciones)
+  ingredientes.py        -> ingredientes y su precio por kg
+  pizzas.py              -> las 21 pizzas con los gramos de cada ingrediente
+  gastos.py              -> suministros, personal, alquiler e IVA
+  margenes.py            -> margen de beneficio
+  temporada.py           -> pizzas que se venden al mes según la temporada
+  calculos.py            -> cálculo del precio de una pizza y del IVA
+  bebidas.py             -> carta de bebidas
+  carrito.py             -> añadir, quitar y ver productos del carrito
+  ofertas.py             -> las 4 ofertas
+  ticket.py              -> ticket final
+  menu.py                -> menú de la caja
+srcV2/                   -> versión 2 (clases)
+  ingredientes2.py       -> clase Ingrediente
+  pizzas2.py             -> clase Pizza
+  bebidas2.py            -> clase Bebida
+  temporada.py           -> clase Temporada
+  calculos2.py           -> clase Calculadora (gastos, margen e IVA)
+  carrito2.py            -> clase Carrito
+  ofertas2.py            -> clase Ofertas
+  ticket2.py             -> clase Ticket
+  menu2.py               -> clase Caja (menú de la caja)
+tests/                   -> pruebas de las dos versiones
+docsV1/                  -> memoria y enunciado de la versión 1
+docsV2/                  -> notas de la versión 2
 ```
 
-## Estructuras de datos
+## Versión 1: funciones
+
+### Estructuras de datos
 
 - **Diccionarios**: `ingredientes` (ingrediente → precio por kg), `pizzas` (pizza → diccionario de ingrediente → gramos), `bebidas` (bebida → precio) y el que devuelve `contarProductos` (producto → cantidad).
 - **Listas**: el `carrito` (por ejemplo `["Margarita", "Margarita", "cola"]`) y la lista de descuentos que se aplican.
 - **Tuplas**: `temporadas` y `diasSemana`, que no cambian nunca. Cada descuento también es una tupla `(nombre, dinero)`.
 - **Conjuntos**: `pizzas_2x1`, las pizzas que entran en el 2x1.
 
-## Funciones
+### Funciones
 
 | Archivo | Funciones |
 |---|---|
@@ -44,6 +76,32 @@ docs/                -> memoria y enunciado
 | ticket.py | `mostrarTicket` |
 | menu.py | `mostrarMenu`, `pedirTemporada`, `pedirDia`, `iniciarCaja` |
 
+## Versión 2: clases
+
+### Clases
+
+| Archivo | Clase | Atributos | Métodos |
+|---|---|---|---|
+| ingredientes2.py | `Ingrediente` | `nombre`, `precioKg` | `precio(gramos)` |
+| pizzas2.py | `Pizza` | `nombre`, `receta` | `costeIngredientes()`, `precio(temporada)`, `nombreTicket()`, `mostrarDesglose(temporada)` |
+| bebidas2.py | `Bebida` | `nombre`, `precioFijo` | `precio(temporada)`, `nombreTicket()` |
+| temporada.py | `Temporada` | `nombre`, `pizzasEstimadas` | `obtenerPizzasEstimadas()` |
+| calculos2.py | `Calculadora` | `suministrosPorPizza`, `personalMensual`, `alquilerMensual`, `iva`, `margen` | `pizzasDelMes`, `costeFijoPorPizza`, `costeTotal`, `precioSinIva`, `precioConIva`, `precioFinal`, `separarIva` |
+| carrito2.py | `Carrito` | `productos` | `agregar`, `quitar`, `vaciar`, `estaVacio`, `pizzas`, `bebidas`, `contarProductos`, `total(temporada)`, `mostrar(temporada)` |
+| ofertas2.py | `Ofertas` | `pizzas2x1`, `descuentoMenu`, `diaDescuento`, `porcentajeDia`, `minimoPedido`, `porcentajePedido` | `dosPorUno`, `menu`, `descuentoDelDia`, `pedidoGrande`, `aplicar(carrito, temporada, dia)`, `mostrarDescuentos`, `mostrarDisponibles` |
+| ticket2.py | `Ticket` | `carrito`, `temporada`, `dia`, `ofertas` | `mostrar()` |
+| menu2.py | `Caja` | `carrito`, `temporada`, `dia`, `ofertas` | un método por opción del menú e `iniciar()` |
+
+Cada archivo crea también los objetos que usa el resto del programa: el diccionario `ingredientes` con un `Ingrediente` por ingrediente, `pizzas` con una `Pizza` por receta, `bebidas`, las temporadas `baja`, `media` y `alta`, y los objetos `calculadora` y `ofertas`.
+
+### Qué cambia respecto a la versión 1
+
+- **Los datos van con su comportamiento.** En la v1 el precio de una pizza se calcula con `calcularPrecioPizza("Margarita", temporada)`. En la v2 la pizza sabe calcularlo: `pizzas["Margarita"].precio(temporada)`.
+- **Pizzas y bebidas se usan igual.** Las dos clases tienen `precio(temporada)` y `nombreTicket()`, así que el carrito y el ticket no necesitan saber si un producto es pizza o bebida para sumarlo o imprimirlo. La bebida simplemente ignora la temporada.
+- **El carrito es un objeto.** En vez de una lista que se pasa a todas las funciones, el `Carrito` guarda sus productos y tiene métodos para añadir, quitar, contar y sumar.
+- **Los números se pueden cambiar sin tocar el código.** La `Calculadora` y las `Ofertas` guardan sus valores como atributos. Por ejemplo, `Ofertas(diaDescuento="lunes")` pone el descuento del día los lunes, y `Calculadora(iva=0.21)` calcula con otro IVA.
+- **Las temporadas son objetos.** La `Calculadora` coge las pizzas al mes de la clase `Temporada`, así que una temporada nueva como `Temporada("festival", 2900)` funciona sin cambiar nada más.
+
 ## Ofertas
 
 1. **2x1** en Margarita, Prosciutto y Hawaiana. Se pueden mezclar y la más barata sale gratis.
@@ -51,7 +109,7 @@ docs/                -> memoria y enunciado
 3. **Martes**: 20% de descuento en las pizzas (sin contar las que ya son gratis).
 4. **Pedido de más de 30 €**: 10% de descuento. Se mira con el total después de las otras ofertas.
 
-El día se coge solo con la fecha del ordenador, pero se puede cambiar en el menú (opción 10) para probar la oferta del martes.
+El día se coge solo con la fecha del ordenador, pero se puede cambiar en el menú (opción 10) para probar la oferta del martes. Las ofertas son las mismas en las dos versiones.
 
 ## Cómo se calcula el precio de una pizza
 
@@ -92,7 +150,7 @@ Las bebidas tienen un **precio fijo de carta con el IVA incluido**, como en cual
 
 ## Ejemplo de ejecución
 
-Pedido de 2 Margaritas, 1 Barbacoa y 2 colas un martes, en temporada media:
+Pedido de 2 Margaritas, 1 Barbacoa y 2 colas un martes, en temporada media (versión 1; la versión 2 da el mismo total y muestra los importes siempre con 2 decimales):
 
 ```
 PIZZERIA PYTHON
@@ -113,3 +171,15 @@ Total: 22.86 €
 
 Gracias por su compra.
 ```
+
+## Pruebas
+
+Las pruebas están en la carpeta `tests/`. Para lanzarlas todas desde la carpeta del proyecto:
+
+```
+python -m unittest discover -s tests -t .
+```
+
+- `test_calculos.py` prueba la versión 1.
+- Los `test_*2.py` prueban cada clase de la versión 2. Varios comparan sus resultados con la versión 1 para asegurarse de que las dos dan los mismos precios y descuentos (por ejemplo, `test_ofertas2.py` compara 300 carritos al azar).
+- `test_menu2.py` y `test_main.py` simulan a una persona usando el menú.
