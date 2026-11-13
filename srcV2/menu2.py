@@ -5,11 +5,12 @@ from datetime import date
 
 from srcV2.temporada import temporadas
 from srcV2.pizzas2 import mostrarPizzas, buscarPizza
-from srcV2.bebidas2 import mostrarBebidas
+from srcV2.bebidas2 import mostrarBebidas, buscarBebida
+from srcV2.menus2 import crearMenuPizzaBebida, crearMenuFamiliar, mostrarMenus
 from srcV2.carrito2 import Carrito
 from srcV2.ofertas2 import ofertas
 from srcV2.ticket2 import Ticket
-from srcV2.excepciones2 import PizzeriaError
+from srcV2.excepciones2 import PizzeriaError, ProductoNoEncontradoError
 
 #dias validos (tupla porque no cambian)
 diasSemana = ("lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo")
@@ -41,6 +42,7 @@ class Caja:
         print("8. Ver como se calcula el precio de una pizza")
         print("9. Cambiar temporada")
         print("10. Cambiar dia")
+        print("11. Añadir un menu (pizza + bebida o familiar)")
         print("0. Salir")
 
     def verOfertas(self):
@@ -55,6 +57,37 @@ class Caja:
         #si la cantidad no es un entero mayor que 0, el carrito lanza CantidadNoValidaError
         cantidad = input("Cuantas? ")
         self.carrito.agregar(producto, cantidad)
+
+    #pide una pizza por su nombre; si no existe lanza ProductoNoEncontradoError
+    def pedirPizza(self, texto):
+        nombre = input(texto)
+        pizza = buscarPizza(nombre)
+        if pizza is None:
+            raise ProductoNoEncontradoError(nombre)
+        return pizza
+
+    #pide una bebida por su nombre; si no existe lanza ProductoNoEncontradoError
+    def pedirBebida(self, texto):
+        nombre = input(texto)
+        bebida = buscarBebida(nombre)
+        if bebida is None:
+            raise ProductoNoEncontradoError(nombre)
+        return bebida
+
+    def anadirMenu(self):
+        mostrarMenus()
+        tipo = input("Que menu quieres? ").strip()
+        if tipo == "1":
+            menu = crearMenuPizzaBebida(self.pedirPizza("Que pizza? "), self.pedirBebida("Que bebida? "))
+        elif tipo == "2":
+            menu = crearMenuFamiliar(self.pedirPizza("Primera pizza? "), self.pedirPizza("Segunda pizza? "),
+                                     self.pedirBebida("Primera bebida? "), self.pedirBebida("Segunda bebida? "))
+        else:
+            print("Ese menu no existe")
+            return
+        self.carrito.agregarProducto(menu, 1)
+        print(f"{menu.nombreTicket()}: {menu.precio(self.temporada):.2f} € "
+              f"(por separado {menu.precioPorSeparado(self.temporada):.2f} €)")
 
     def quitarProducto(self):
         self.carrito.quitar(input("Que quieres quitar? "))
@@ -112,6 +145,8 @@ class Caja:
             self.temporada = pedirTemporada()
         elif opcion == "10":
             self.dia = pedirDia()
+        elif opcion == "11":
+            self.anadirMenu()
         elif opcion == "0":
             print("Adios!")
             return False
