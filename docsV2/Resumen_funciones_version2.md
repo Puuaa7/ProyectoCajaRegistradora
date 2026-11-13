@@ -12,7 +12,7 @@ Se ha creado la rama version2_src_ticket a partir de version2. Se ha revisado sr
 
 Se ha creado srcV2/calculos2.py con la clase Calculadora, que hace los mismos cálculos que srcV1/calculos.py: coste fijo por pizza, coste total, precio sin IVA, precio con IVA y separar el IVA del total. También se ha creado un objeto calculadora listo para usar, que es el que importa el ticket. Se ha añadido tests/test_calculos2.py, que comprueba que da los mismos precios que la v1 en las 21 pizzas y las 3 temporadas.
 
-### Temporada (Pau) (version2_src_temporada)
+### Temporada (version2_src_temporada)
 
 Hoy he actualizado la rama version2_src_temporada con lo último de version2. Después he creado srcV2/temporada.py con la clase Temporada y tres objetos: baja (600 pizzas al mes), media (1000) y alta (1500). Lo he probado y lo he subido a la rama.
 

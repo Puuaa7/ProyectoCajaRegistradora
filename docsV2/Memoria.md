@@ -31,7 +31,7 @@ Dia 2 "10/11/2026"
     7.Se han arreglado las pruebas de la versión 1, que todavía importaban de "src", y una prueba de la temporada que esperaba un resultado que el código no da.
     8.Se ha cambiado la Calculadora para que use la clase Temporada de Pau en vez de tener las 600, 1000 y 1500 pizzas repetidas.
     9.Se han hecho las clases Gastos ("gastos2.py") y Margen ("margenes2.py"), que eran las dos piezas de la versión 1 que todavía no tenían archivo en la versión 2. Antes sus números estaban dentro de la Calculadora; ahora la Calculadora recibe un objeto Gastos y un objeto Margen.
-    10.Se ha actualizado el README con las dos versiones, las clases de la versión 2 y cómo lanzar las pruebas. También se ha escrito en "docsV2/log_version2.md" un log con lo que se ha hecho en cada rama, junto con el de la temporada de Pau.
+    10.Se ha actualizado el README con las dos versiones, las clases de la versión 2 y cómo lanzar las pruebas. También se ha escrito en "docsV2/Resumen_funciones_version2.md" un log con lo que se ha hecho en cada rama, junto con el de la temporada de Pau.
     11.Pruebas: cada clase de la versión 2 tiene su archivo de pruebas, y muchas pruebas comparan el resultado con la versión 1 para asegurarnos de que las dos dan los mismos precios. Por ejemplo, las ofertas se prueban con 300 carritos al azar. También hay pruebas que simulan a una persona usando el menú. En total pasan 56 pruebas, que se lanzan todas con: python -m unittest discover -s tests -t .
 
 
