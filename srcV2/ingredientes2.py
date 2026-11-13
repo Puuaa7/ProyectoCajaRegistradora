@@ -1,11 +1,30 @@
 #ingredientes version 2
 
+from srcV2.excepciones2 import IngredienteNoEncontradoError, PrecioNoValidoError
+
 
 class Ingrediente:
     #cada ingrediente tiene un nombre y lo que cuesta el kilo
+    #los atributos empiezan por _ (encapsulados): se leen con @property
+    #y el precio solo se puede cambiar con su setter, que lo valida
     def __init__(self, nombre, precioKg):
-        self.nombre = nombre
+        self._nombre = nombre
         self.precioKg = precioKg
+
+    @property
+    def nombre(self):
+        return self._nombre
+
+    @property
+    def precioKg(self):
+        return self._precioKg
+
+    #el precio no puede ser negativo
+    @precioKg.setter
+    def precioKg(self, precioKg):
+        if precioKg < 0:
+            raise PrecioNoValidoError(precioKg)
+        self._precioKg = precioKg
 
     #lo que cuestan esos gramos del ingrediente
     def precio(self, gramos):
@@ -75,8 +94,8 @@ for nombre in PRECIOS_KG:
     ingredientes[nombre] = Ingrediente(nombre, PRECIOS_KG[nombre])
 
 
-#busca un ingrediente por su nombre, si no existe da error
+#busca un ingrediente por su nombre, si no existe lanza IngredienteNoEncontradoError
 def buscarIngrediente(nombre):
     if nombre not in ingredientes:
-        raise ValueError("Ingrediente no válido: " + nombre)
+        raise IngredienteNoEncontradoError(nombre)
     return ingredientes[nombre]

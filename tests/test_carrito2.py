@@ -3,6 +3,7 @@ from srcV2.carrito2 import Carrito, buscarProducto, esPizza, esBebida
 from srcV2.pizzas2 import pizzas
 from srcV2.bebidas2 import bebidas
 from srcV2.ticket2 import Ticket
+from srcV2.excepciones2 import ProductoNoEncontradoError, CantidadNoValidaError
 from srcV1.carrito import calcularTotalCarrito
 
 
@@ -17,13 +18,17 @@ class TestCarrito(unittest.TestCase):
     def test_buscar_producto(self):
         self.assertIs(buscarProducto("margarita"), pizzas["Margarita"])
         self.assertIs(buscarProducto("Cola"), bebidas["cola"])
-        self.assertIsNone(buscarProducto("kebab"))
+        with self.assertRaises(ProductoNoEncontradoError):
+            buscarProducto("kebab")
         self.assertTrue(esPizza(pizzas["Margarita"]))
         self.assertTrue(esBebida(bebidas["cola"]))
 
     def test_agregar_y_quitar(self):
         self.assertTrue(self.carrito.agregar("margarita", 2))
-        self.assertFalse(self.carrito.agregar("kebab", 1))
+        with self.assertRaises(ProductoNoEncontradoError):
+            self.carrito.agregar("kebab", 1)
+        with self.assertRaises(CantidadNoValidaError):
+            self.carrito.agregar("cola", 0)
         self.assertTrue(self.carrito.agregar("cola", 1))
         self.assertEqual(len(self.carrito), 3)
         self.assertTrue(self.carrito.quitar("Margarita"))

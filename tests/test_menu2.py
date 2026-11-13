@@ -22,8 +22,8 @@ class TestMenu(unittest.TestCase):
     def test_cantidad_incorrecta(self):
         caja = Caja("media", "lunes")
         salida = ejecutar(caja.iniciar, ["4", "margarita", "dos", "4", "margarita", "0", "0"])
-        self.assertIn("Introduce un número entero", salida)
-        self.assertIn("mayor a 0", salida)
+        self.assertIn("La cantidad 'dos' no es válida", salida)
+        self.assertIn("La cantidad '0' no es válida", salida)
         self.assertTrue(caja.carrito.estaVacio())
 
     def test_cambiar_temporada_y_dia(self):
@@ -43,6 +43,12 @@ class TestMenu(unittest.TestCase):
         self.assertIn("Esa pizza no existe", salida)
         self.assertIn("El carrito esta vacio", salida)
         self.assertIn("Opcion incorrecta", salida)
+
+    def test_errores_no_cierran_la_caja(self):
+        caja = Caja("media", "lunes")
+        salida = ejecutar(caja.iniciar, ["4", "kebab", "1", "5", "kebab", "4", "cola", "1", "0"])
+        self.assertEqual(salida.count("El producto 'kebab' no existe"), 2)
+        self.assertEqual(len(caja.carrito), 1)
 
     def test_iniciar_caja(self):
         salida = ejecutar(iniciarCaja, ["media", "0"])

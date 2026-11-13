@@ -2,15 +2,19 @@
 
 from srcV2.pizzas2 import Pizza, buscarPizza
 from srcV2.bebidas2 import Bebida, buscarBebida
+from srcV2.excepciones2 import ProductoNoEncontradoError, leerCantidad
 
 
 #busca el producto (pizza o bebida) aunque lo escribas en minusculas
-#si no lo encuentra devuelve None
+#si no lo encuentra lanza ProductoNoEncontradoError
 def buscarProducto(texto):
     pizza = buscarPizza(texto)
     if pizza is not None:
         return pizza
-    return buscarBebida(texto)
+    bebida = buscarBebida(texto)
+    if bebida is not None:
+        return bebida
+    raise ProductoNoEncontradoError(texto)
 
 
 #devuelve True si el producto es una pizza
@@ -29,12 +33,10 @@ class Carrito:
         self.productos = []
 
     #añade un producto al carrito tantas veces como la cantidad
+    #si el producto no existe o la cantidad no es valida lanza una excepcion propia
     def agregar(self, texto, cantidad):
+        cantidad = leerCantidad(cantidad)
         producto = buscarProducto(texto)
-
-        if producto is None:
-            print("Ese producto no existe")
-            return False
 
         for i in range(cantidad):
             self.productos.append(producto)
@@ -42,6 +44,7 @@ class Carrito:
         return True
 
     #quita una unidad del producto del carrito
+    #si el producto no existe lanza ProductoNoEncontradoError
     def quitar(self, texto):
         producto = buscarProducto(texto)
 

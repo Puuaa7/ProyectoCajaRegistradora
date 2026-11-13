@@ -9,6 +9,7 @@ from srcV2.bebidas2 import mostrarBebidas
 from srcV2.carrito2 import Carrito
 from srcV2.ofertas2 import ofertas
 from srcV2.ticket2 import Ticket
+from srcV2.excepciones2 import PizzeriaError
 
 #dias validos (tupla porque no cambian)
 diasSemana = ("lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo")
@@ -51,16 +52,9 @@ class Caja:
 
     def anadirProducto(self):
         producto = input("Que quieres añadir? ")
-        #comprobamos que la cantidad sea un numero entero positivo
+        #si la cantidad no es un entero mayor que 0, el carrito lanza CantidadNoValidaError
         cantidad = input("Cuantas? ")
-        if cantidad.isascii() and cantidad.isdigit():
-            cantidad = int(cantidad)
-            if cantidad > 0:
-                self.carrito.agregar(producto, cantidad)
-            else:
-                print("La cantidad debe ser mayor a 0.")
-        else:
-            print("Introduce un número entero, no se ha añadido nada")
+        self.carrito.agregar(producto, cantidad)
 
     def quitarProducto(self):
         self.carrito.quitar(input("Que quieres quitar? "))
@@ -87,32 +81,43 @@ class Caja:
         while True:
             self.mostrarMenu()
             opcion = input("Elige una opcion: ").strip()
-
-            if opcion == "1":
-                mostrarPizzas(self.temporada)
-            elif opcion == "2":
-                mostrarBebidas()
-            elif opcion == "3":
-                self.verOfertas()
-            elif opcion == "4":
-                self.anadirProducto()
-            elif opcion == "5":
-                self.quitarProducto()
-            elif opcion == "6":
-                self.verCarrito()
-            elif opcion == "7":
-                self.pagar()
-            elif opcion == "8":
-                self.verDesglose()
-            elif opcion == "9":
-                self.temporada = pedirTemporada()
-            elif opcion == "10":
-                self.dia = pedirDia()
-            elif opcion == "0":
-                print("Adios!")
+            #si una opcion lanza un error de la pizzeria, se muestra y la caja sigue
+            try:
+                seguir = self.ejecutarOpcion(opcion)
+            except PizzeriaError as error:
+                print("Error:", error, "- no se ha hecho nada")
+                seguir = True
+            if not seguir:
                 break
-            else:
-                print("Opcion incorrecta")
+
+    #ejecuta una opcion del menu; devuelve False cuando hay que salir
+    def ejecutarOpcion(self, opcion):
+        if opcion == "1":
+            mostrarPizzas(self.temporada)
+        elif opcion == "2":
+            mostrarBebidas()
+        elif opcion == "3":
+            self.verOfertas()
+        elif opcion == "4":
+            self.anadirProducto()
+        elif opcion == "5":
+            self.quitarProducto()
+        elif opcion == "6":
+            self.verCarrito()
+        elif opcion == "7":
+            self.pagar()
+        elif opcion == "8":
+            self.verDesglose()
+        elif opcion == "9":
+            self.temporada = pedirTemporada()
+        elif opcion == "10":
+            self.dia = pedirDia()
+        elif opcion == "0":
+            print("Adios!")
+            return False
+        else:
+            print("Opcion incorrecta")
+        return True
 
 
 #pide la temporada hasta que sea valida
