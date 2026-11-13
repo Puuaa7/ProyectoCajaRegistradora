@@ -65,3 +65,29 @@ Se ha creado la rama version2_src_margenes a partir de version2. Se ha creado sr
 ### README (version2_readme)
 
 Se ha creado la rama version2_readme a partir de version2. Se ha actualizado el README: cómo se elige la versión al arrancar, la estructura con srcV1 y srcV2, una tabla con las clases de la v2, qué cambia respecto a la v1 y cómo lanzar las pruebas.
+
+## 13/11/2026
+
+### Excepciones propias (version2_src_excepciones)
+
+Se ha creado srcV2/excepciones2.py con PizzeriaError y sus subclases ProductoNoEncontradoError, IngredienteNoEncontradoError, CantidadNoValidaError y PrecioNoValidoError, y la función leerCantidad(). El Ingrediente usa @property y su precio no puede ser negativo. El carrito lanza las excepciones y la Caja las captura con try/except sin cerrarse.
+
+### Producto (version2_src_producto)
+
+Se ha creado srcV2/producto2.py con la clase base abstracta Producto (abc): precioSinIva() abstracto y precio(), iva() y nombreTicket() comunes. Pizza y Bebida heredan de Producto. La Pizza guarda objetos Ingrediente (composición). Las pruebas comprueban la herencia, el polimorfismo y que no se puede crear un Producto.
+
+### LineaCarrito (version2_src_lineacarrito)
+
+Se ha añadido la clase LineaCarrito (producto, cantidad y subtotal). El Carrito guarda líneas: si un producto ya está, se suma la cantidad. También calcula la base imponible y el IVA.
+
+### Menús (version2_src_menus)
+
+Se ha creado srcV2/menus2.py con la clase Menu, que hereda de Producto y contiene otros productos. Hay menú pizza + bebida (1 € menos) y menú familiar de 2 pizzas y 2 bebidas (5 € menos). Se añaden con la opción 11 de la caja y en el ticket sale lo que lleva cada menú.
+
+### Jerarquía de ofertas (version2_src_jerarquia_ofertas)
+
+Se ha cambiado srcV2/ofertas2.py: clase base abstracta Oferta y subclases Oferta2x1, OfertaMenu, OfertaDiaSemana, OfertaTemporada (nueva: 10% en bebidas en temporada baja) y OfertaPedidoGrande. La clase Ofertas guarda la lista de ofertas y las aplica en orden.
+
+### Documentación (version2_docs_poo)
+
+Se ha actualizado el README con un diagrama de clases, la tabla de clases y dónde se usa la herencia, el polimorfismo y la encapsulación. Se ha añadido el día 3 a la memoria y las capturas de Trello en docsV2/capturas_trello.

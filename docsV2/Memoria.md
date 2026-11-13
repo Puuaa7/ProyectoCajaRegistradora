@@ -35,9 +35,22 @@ Dia 2 "10/11/2026"
     11.Pruebas: cada clase de la versión 2 tiene su archivo de pruebas, y muchas pruebas comparan el resultado con la versión 1 para asegurarnos de que las dos dan los mismos precios. Por ejemplo, las ofertas se prueban con 300 carritos al azar. También hay pruebas que simulan a una persona usando el menú. En total pasan 56 pruebas, que se lanzan todas con: python -m unittest discover -s tests -t .
 
 
+
+Dia 3 "13/11/2026"
+
+    1.Al revisar el tablero de Trello de la versión 2 vimos que las tarjetas pedían un diseño orientado a objetos más completo que el que teníamos: herencia, clases abstractas, encapsulación con @property y excepciones propias. Primero clasificamos las 20 tarjetas que estaban en "Pendiente" según lo que ya estaba hecho (5 terminadas, 3 en revisión, 8 en proceso y 3 sin empezar), haciendo capturas al principio, a mitad y al final.
+    2.Se han hecho las excepciones propias ("excepciones2.py"): PizzeriaError y sus subclases ProductoNoEncontradoError, IngredienteNoEncontradoError, CantidadNoValidaError y PrecioNoValidoError. La Caja las captura con try/except, enseña el mensaje y sigue funcionando. El Ingrediente se ha encapsulado con @property y su precio no puede ser negativo.
+    3.Se ha hecho la clase base abstracta Producto ("producto2.py"). Pizza y Bebida heredan de ella y cada una sobrescribe precioSinIva() a su manera: la pizza lo calcula con sus ingredientes y gastos, y la bebida lo saca de su precio de carta. Así el carrito y el ticket tratan igual a todos los productos (polimorfismo).
+    4.Se ha hecho la clase LineaCarrito: el carrito ya no guarda los productos sueltos, sino líneas con el producto y su cantidad. Si se añade un producto que ya está, se suma a su línea.
+    5.Se ha hecho la clase Menu ("menus2.py"), que también hereda de Producto y contiene otros productos: el menú pizza + bebida (1 € menos) y el menú familiar con 2 pizzas y 2 bebidas (5 € menos). Se piden con la opción 11 de la caja.
+    6.Se han separado las ofertas en una jerarquía: una clase base abstracta Oferta y una subclase por oferta (Oferta2x1, OfertaMenu, OfertaDiaSemana, OfertaTemporada y OfertaPedidoGrande). Se ha añadido una oferta nueva: en temporada baja, 10% de descuento en las bebidas.
+    7.Se han actualizado las tarjetas de Trello con lo que se ha hecho, el README (con un diagrama de clases y una explicación de dónde se usa la herencia, el polimorfismo y la encapsulación) y esta memoria. En total pasan 82 pruebas.
+    8.Decisión: la bebida mantiene el precio fijo de carta con el IVA incluido, como en la versión 1, en vez de "precio de compra + margen" como ponía la tarjeta de Trello. Así los precios de las bebidas son los mismos en las dos versiones y el criterio es el que ya explicábamos en el README.
+
 Qué hemos aprendido con la versión 2
 
     1.Una clase junta los datos y lo que se puede hacer con ellos. En la versión 1, para saber el precio de una pizza había que llamar a calcularPrecioPizza("Margarita", temporada). En la versión 2 la pizza lo sabe calcular sola: pizzas["Margarita"].precio(temporada).
     2.Si dos clases tienen los mismos métodos (como Pizza y Bebida), el resto del programa las puede usar igual sin saber cuál es cuál. Esto ha hecho el carrito y el ticket más sencillos.
-    3.Guardar los números en atributos (en los Gastos, el Margen y las Ofertas) permite crear objetos con otros valores, por ejemplo Calculadora(gastos=Gastos(iva=0.21)) u Ofertas(diaDescuento="lunes"), sin cambiar el código. Además, un objeto puede usar otros: la Calculadora usa un objeto Gastos, un objeto Margen y las Temporadas.
-    4.Hacer una rama por cada parte, con su commit y juntándola con "version2" en cuanto está lista, ha funcionado mucho mejor que en la versión 1, donde lo juntamos todo al final. Hay que fijarse bien en la rama de destino de los Pull Requests ("version2" y no "main").
+    3.Guardar los números en atributos (en los Gastos, el Margen y las Ofertas) permite crear objetos con otros valores, por ejemplo Calculadora(gastos=Gastos(iva=0.21)) u Ofertas([OfertaDiaSemana(Oferta2x1(), dia="lunes")]), sin cambiar el código. Además, un objeto puede usar otros: la Calculadora usa un objeto Gastos, un objeto Margen y las Temporadas.
+    4.La herencia evita repetir código: Producto tiene una sola vez lo que comparten todos los productos (precio con IVA, IVA, nombre en el ticket), y cada subclase solo escribe lo que la hace distinta. Con las clases abstractas Python no deja olvidarse de escribir ese método.
+    5.Hacer una rama por cada parte, con su commit y juntándola con "version2" en cuanto está lista, ha funcionado mucho mejor que en la versión 1, donde lo juntamos todo al final. Hay que fijarse bien en la rama de destino de los Pull Requests ("version2" y no "main").

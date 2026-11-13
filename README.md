@@ -17,7 +17,7 @@ Al arrancar, el programa pregunta qué versión quieres usar:
 Que version quieres usar?
 ```
 
-Las dos versiones hacen lo mismo y dan los mismos precios. La diferencia está en cómo está escrito el código:
+Las dos versiones calculan los mismos precios de pizzas y bebidas. La diferencia principal está en cómo está escrito el código, y la versión 2 añade los menús, una oferta de temporada y excepciones propias:
 
 - **Versión 1** (`srcV1/`): funciones sueltas y datos en diccionarios y listas.
 - **Versión 2** (`srcV2/`): clases y objetos. Cada cosa de la pizzería (ingrediente, pizza, bebida, carrito, ofertas, ticket, caja) es una clase con sus datos y sus métodos.
@@ -39,15 +39,18 @@ srcV1/                   -> versión 1 (funciones)
   ticket.py              -> ticket final
   menu.py                -> menú de la caja
 srcV2/                   -> versión 2 (clases)
+  excepciones2.py        -> excepciones propias (PizzeriaError y sus subclases)
   ingredientes2.py       -> clase Ingrediente
-  pizzas2.py             -> clase Pizza
-  bebidas2.py            -> clase Bebida
+  producto2.py           -> clase base abstracta Producto
+  pizzas2.py             -> clase Pizza (hereda de Producto)
+  bebidas2.py            -> clase Bebida (hereda de Producto)
+  menus2.py              -> clase Menu (hereda de Producto): pizza + bebida y familiar
   temporada.py           -> clase Temporada
   gastos2.py             -> clase Gastos (suministros, personal, alquiler e IVA)
   margenes2.py           -> clase Margen (margen de beneficio)
   calculos2.py           -> clase Calculadora
-  carrito2.py            -> clase Carrito
-  ofertas2.py            -> clase Ofertas
+  carrito2.py            -> clases Carrito y LineaCarrito
+  ofertas2.py            -> clase base Oferta, sus 5 subclases y la clase Ofertas
   ticket2.py             -> clase Ticket
   menu2.py               -> clase Caja (menú de la caja)
 tests/                   -> pruebas de las dos versiones
@@ -80,32 +83,67 @@ docsV2/                  -> notas de la versión 2
 
 ## Versión 2: clases
 
+### Diagrama de clases
+
+```
+Herencia:
+
+Producto (abstracta)        Oferta (abstracta)          PizzeriaError (Exception)
+ ├── Pizza                   ├── Oferta2x1               ├── ProductoNoEncontradoError
+ ├── Bebida                  ├── OfertaMenu              ├── IngredienteNoEncontradoError
+ └── Menu                    ├── OfertaDiaSemana         ├── CantidadNoValidaError
+                             ├── OfertaTemporada         └── PrecioNoValidoError
+                             └── OfertaPedidoGrande
+
+Composición (un objeto tiene o usa otros):
+
+Pizza ──> Ingrediente               Menu ──> Producto (sus pizzas y bebidas)
+Carrito ──> LineaCarrito ──> Producto
+Calculadora ──> Gastos, Margen y Temporada
+Caja ──> Carrito, Ofertas y Ticket
+```
+
 ### Clases
 
 | Archivo | Clase | Atributos | Métodos |
 |---|---|---|---|
-| ingredientes2.py | `Ingrediente` | `nombre`, `precioKg` | `precio(gramos)` |
-| pizzas2.py | `Pizza` | `nombre`, `receta` | `costeIngredientes()`, `precio(temporada)`, `nombreTicket()`, `mostrarDesglose(temporada)` |
-| bebidas2.py | `Bebida` | `nombre`, `precioFijo` | `precio(temporada)`, `nombreTicket()` |
+| excepciones2.py | `PizzeriaError` y subclases | mensaje del error | — |
+| ingredientes2.py | `Ingrediente` | `nombre`, `precioKg` (con `@property`, el precio no puede ser negativo) | `precio(gramos)` |
+| producto2.py | `Producto` (abstracta) | `nombre` | `precioSinIva()` (abstracto), `precio()`, `iva()`, `nombreTicket()` |
+| pizzas2.py | `Pizza(Producto)` | `nombre`, `receta` (objetos `Ingrediente` y sus gramos) | `costeIngredientes()`, `costeTotal()`, `precioSinIva()`, `mostrarDesglose()` |
+| bebidas2.py | `Bebida(Producto)` | `nombre`, `precioFijo` | `precioSinIva()`, `precio()` |
+| menus2.py | `Menu(Producto)` | `nombre`, `productos`, `descuento` | `precioPorSeparado()`, `precio()`, `precioSinIva()`, `nombreTicket()` |
 | temporada.py | `Temporada` | `nombre`, `pizzasEstimadas` | `obtenerPizzasEstimadas()` |
 | gastos2.py | `Gastos` | `suministrosPorPizza`, `personalMensual`, `alquilerMensual`, `iva` | `gastosFijosMensuales()` |
 | margenes2.py | `Margen` | `beneficio` | `aplicar(coste)`, `porcentaje()` |
 | calculos2.py | `Calculadora` | `gastos` (objeto `Gastos`), `margen` (objeto `Margen`) | `pizzasDelMes`, `costeFijoPorPizza`, `costeTotal`, `precioSinIva`, `precioConIva`, `precioFinal`, `separarIva` |
-| carrito2.py | `Carrito` | `productos` | `agregar`, `quitar`, `vaciar`, `estaVacio`, `pizzas`, `bebidas`, `contarProductos`, `total(temporada)`, `mostrar(temporada)` |
-| ofertas2.py | `Ofertas` | `pizzas2x1`, `descuentoMenu`, `diaDescuento`, `porcentajeDia`, `minimoPedido`, `porcentajePedido` | `dosPorUno`, `menu`, `descuentoDelDia`, `pedidoGrande`, `aplicar(carrito, temporada, dia)`, `mostrarDescuentos`, `mostrarDisponibles` |
+| carrito2.py | `LineaCarrito` | `producto`, `cantidad` | `subtotal(temporada)` |
+| carrito2.py | `Carrito` | `lineas` (objetos `LineaCarrito`) | `agregar`, `agregarProducto`, `quitar`, `vaciar`, `estaVacio`, `pizzas`, `bebidas`, `contarProductos`, `total`, `baseImponible`, `iva`, `mostrar` |
+| ofertas2.py | `Oferta` (abstracta) | `nombre` | `calcular()` (abstracto), `descripcion()` (abstracto), `esAplicable()` |
+| ofertas2.py | `Oferta2x1`, `OfertaMenu`, `OfertaDiaSemana`, `OfertaTemporada`, `OfertaPedidoGrande` | los datos de cada oferta | sobrescriben `calcular()` y `descripcion()` |
+| ofertas2.py | `Ofertas` | `lista` (objetos `Oferta`) | `aplicar(carrito, temporada, dia)`, `mostrarDescuentos`, `mostrarDisponibles` |
 | ticket2.py | `Ticket` | `carrito`, `temporada`, `dia`, `ofertas` | `mostrar()` |
-| menu2.py | `Caja` | `carrito`, `temporada`, `dia`, `ofertas` | un método por opción del menú e `iniciar()` |
+| menu2.py | `Caja` | `carrito`, `temporada`, `dia`, `ofertas` | un método por opción del menú, `ejecutarOpcion()` e `iniciar()` |
 
 Cada archivo crea también los objetos que usa el resto del programa: el diccionario `ingredientes` con un `Ingrediente` por ingrediente, `pizzas` con una `Pizza` por receta, `bebidas`, las temporadas `baja`, `media` y `alta`, y los objetos `gastos`, `margen`, `calculadora` y `ofertas`.
+
+### Programación orientada a objetos en la versión 2
+
+- **Herencia.** `Pizza`, `Bebida` y `Menu` heredan de `Producto`. Las cinco ofertas heredan de `Oferta`. Las excepciones heredan de `PizzeriaError`, que hereda de `Exception`.
+- **Clases abstractas.** `Producto` y `Oferta` usan `abc`: no se pueden crear directamente y obligan a cada subclase a escribir su `precioSinIva()` o su `calcular()`.
+- **Polimorfismo.** El carrito y el ticket llaman a `producto.precio(temporada)` sin saber si es una pizza (precio calculado), una bebida (precio fijo de carta) o un menú (suma con descuento). `Ofertas.aplicar()` recorre la lista llamando a `oferta.calcular()` sin saber qué oferta es.
+- **Encapsulación.** Los atributos empiezan por `_` y se leen con `@property`. Los que se pueden cambiar tienen un *setter* que valida el dato: el precio de un ingrediente no puede ser negativo y la cantidad de una línea del carrito tiene que ser un entero mayor que 0.
+- **Composición.** Una `Pizza` está hecha de objetos `Ingrediente`. Un `Menu` contiene otros productos. El `Carrito` tiene objetos `LineaCarrito`. La `Calculadora` usa un objeto `Gastos`, un `Margen` y las `Temporada`.
+- **Excepciones propias.** Si se pide un producto que no existe o una cantidad no válida, se lanza `ProductoNoEncontradoError` o `CantidadNoValidaError`. La `Caja` las captura con `try/except PizzeriaError`, enseña el mensaje y sigue funcionando.
 
 ### Qué cambia respecto a la versión 1
 
 - **Los datos van con su comportamiento.** En la v1 el precio de una pizza se calcula con `calcularPrecioPizza("Margarita", temporada)`. En la v2 la pizza sabe calcularlo: `pizzas["Margarita"].precio(temporada)`.
-- **Pizzas y bebidas se usan igual.** Las dos clases tienen `precio(temporada)` y `nombreTicket()`, así que el carrito y el ticket no necesitan saber si un producto es pizza o bebida para sumarlo o imprimirlo. La bebida simplemente ignora la temporada.
-- **El carrito es un objeto.** En vez de una lista que se pasa a todas las funciones, el `Carrito` guarda sus productos y tiene métodos para añadir, quitar, contar y sumar.
-- **Los números se pueden cambiar sin tocar el código.** Los `Gastos`, el `Margen` y las `Ofertas` guardan sus valores como atributos. Por ejemplo, `Ofertas(diaDescuento="lunes")` pone el descuento del día los lunes, y `Calculadora(gastos=Gastos(iva=0.21))` calcula con otro IVA.
-- **Unos objetos usan otros.** La `Calculadora` no tiene los números dentro: recibe un objeto `Gastos` y un objeto `Margen`, y coge las pizzas al mes de la `Temporada`.
-- **Las temporadas son objetos.** La `Calculadora` coge las pizzas al mes de la clase `Temporada`, así que una temporada nueva como `Temporada("festival", 2900)` funciona sin cambiar nada más.
+- **Menús como producto.** En la v2 se puede pedir un menú pizza + bebida o un menú familiar (opción 11 de la caja). En el ticket sale el menú con lo que lleva dentro.
+- **Una oferta más.** En temporada baja hay un 10% de descuento en las bebidas (`OfertaTemporada`).
+- **Los números se pueden cambiar sin tocar el código.** Por ejemplo, `Ofertas([OfertaDiaSemana(Oferta2x1(), dia="lunes")])` crea una lista de ofertas con descuento los lunes, y `Calculadora(gastos=Gastos(iva=0.21))` calcula con otro IVA.
+- **Las temporadas son objetos.** Una temporada nueva como `Temporada("festival", 2900)` funciona sin cambiar nada más.
+- **Los errores no cierran el programa.** Se controlan con excepciones propias.
 
 ## Ofertas
 
@@ -113,8 +151,11 @@ Cada archivo crea también los objetos que usa el resto del programa: el diccion
 2. **Menú pizza + bebida**: 1 € de descuento por cada pizza con bebida. Las pizzas gratis del 2x1 no cuentan.
 3. **Martes**: 20% de descuento en las pizzas (sin contar las que ya son gratis).
 4. **Pedido de más de 30 €**: 10% de descuento. Se mira con el total después de las otras ofertas.
+5. **Temporada baja** (solo en la versión 2): 10% de descuento en las bebidas.
 
-El día se coge solo con la fecha del ordenador, pero se puede cambiar en el menú (opción 10) para probar la oferta del martes. Las ofertas son las mismas en las dos versiones.
+El día se coge solo con la fecha del ordenador, pero se puede cambiar en el menú (opción 10) para probar la oferta del martes.
+
+En la versión 2, además, se pueden pedir **menús**: el menú pizza + bebida (1 € menos) y el menú familiar con 2 pizzas y 2 bebidas (5 € menos). Las pizzas y bebidas de un menú ya tienen su descuento, así que no cuentan para el 2x1, la oferta de menú automática ni la del martes.
 
 ## Cómo se calcula el precio de una pizza
 
@@ -187,4 +228,5 @@ python -m unittest discover -s tests -t .
 
 - `test_calculos.py` prueba la versión 1.
 - Los `test_*2.py` prueban cada clase de la versión 2. Varios comparan sus resultados con la versión 1 para asegurarse de que las dos dan los mismos precios y descuentos (por ejemplo, `test_ofertas2.py` compara 300 carritos al azar).
+- `test_producto2.py`, `test_menus2.py` y `test_excepciones2.py` prueban la herencia, el polimorfismo, la encapsulación y las excepciones propias.
 - `test_menu2.py` y `test_main.py` simulan a una persona usando el menú.
