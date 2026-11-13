@@ -1,5 +1,5 @@
 import unittest
-from srcV2.carrito2 import Carrito, buscarProducto, esPizza, esBebida
+from srcV2.carrito2 import Carrito, LineaCarrito, buscarProducto, esPizza, esBebida
 from srcV2.pizzas2 import pizzas
 from srcV2.bebidas2 import bebidas
 from srcV2.ticket2 import Ticket
@@ -51,6 +51,31 @@ class TestCarrito(unittest.TestCase):
         listaV1 = ["Barbacoa", "Barbacoa", "Trufada", "cerveza", "cerveza", "cerveza"]
         for temporada in ("baja", "media", "alta"):
             self.assertEqual(self.carrito.total(temporada), calcularTotalCarrito(listaV1, temporada))
+
+    def test_lineas(self):
+        #si un producto ya esta en el carrito se suma la cantidad a su linea
+        self.carrito.agregar("margarita", 2)
+        self.carrito.agregar("cola", 1)
+        self.carrito.agregar("Margarita", 3)
+        self.assertEqual(len(self.carrito.lineas), 2)
+        self.assertEqual(self.carrito.lineas[0].cantidad, 5)
+        self.assertEqual(len(self.carrito), 6)
+        #al quitar se resta una unidad, y la linea desaparece al llegar a 0
+        self.carrito.quitar("cola")
+        self.assertEqual(len(self.carrito.lineas), 1)
+
+    def test_linea_carrito(self):
+        linea = LineaCarrito(pizzas["Margarita"], 3)
+        self.assertAlmostEqual(linea.subtotal("media"), 3 * 11.95)
+        with self.assertRaises(CantidadNoValidaError):
+            linea.cantidad = 0
+
+    def test_base_e_iva(self):
+        self.carrito.agregar("agua", 1)
+        self.carrito.agregar("cola", 1)
+        #3.20 euros con iva: 2.91 de base y 0.29 de iva
+        self.assertEqual(self.carrito.baseImponible("media"), 2.91)
+        self.assertEqual(self.carrito.iva("media"), 0.29)
 
     def test_vaciar(self):
         self.carrito.agregar("agua", 2)
