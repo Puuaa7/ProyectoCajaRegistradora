@@ -2,25 +2,40 @@
 
 from srcV2.ingredientes2 import buscarIngrediente
 from srcV2.calculos2 import calculadora
+from srcV2.producto2 import Producto
 
 
-class Pizza:
-    #cada pizza tiene un nombre y su receta (ingrediente: gramos)
+class Pizza(Producto):
+    #Pizza hereda de Producto
+    #cada pizza tiene un nombre y su receta: los objetos Ingrediente que lleva con sus gramos
+    #(composicion: la pizza esta hecha de ingredientes)
     def __init__(self, nombre, receta):
-        self.nombre = nombre
-        self.receta = receta
+        super().__init__(nombre)
+        #al crear la pizza buscamos cada ingrediente en el catalogo
+        #si alguno no existe se lanza IngredienteNoEncontradoError
+        self._receta = {}
+        for nombreIngrediente in receta:
+            self._receta[buscarIngrediente(nombreIngrediente)] = receta[nombreIngrediente]
+
+    #la receta como diccionario nombre del ingrediente -> gramos
+    @property
+    def receta(self):
+        return {ingrediente.nombre: gramos for ingrediente, gramos in self._receta.items()}
 
     #suma lo que cuestan todos los ingredientes de la pizza
     def costeIngredientes(self):
         coste = 0
-        for ingrediente in self.receta:
-            gramos = self.receta[ingrediente]
-            coste = coste + buscarIngrediente(ingrediente).precio(gramos)
+        for ingrediente, gramos in self._receta.items():
+            coste = coste + ingrediente.precio(gramos)
         return round(coste, 2)
 
-    #precio final de la pizza (con gastos, beneficio e iva)
-    def precio(self, temporada):
-        return calculadora.precioFinal(self.costeIngredientes(), temporada)
+    #lo que nos cuesta hacer la pizza: ingredientes + suministros + gastos fijos
+    def costeTotal(self, temporada):
+        return calculadora.costeTotal(self.costeIngredientes(), temporada)
+
+    #sobrescribe el metodo de Producto: coste total x margen de beneficio
+    def precioSinIva(self, temporada=None):
+        return calculadora.precioSinIva(self.costeTotal(temporada))
 
     #nombre que sale en el ticket
     def nombreTicket(self):
@@ -49,8 +64,6 @@ class Pizza:
         print(f"IVA: {precioConIva - precioSinIva:.2f} €")
         print(f"Precio final: {precioConIva:.2f} €")
 
-    def __str__(self):
-        return "Pizza " + self.nombre
 
 
 #pizzas y sus ingredientes (gramos por ingrediente)

@@ -1,21 +1,33 @@
 #bebidas version 2
 
+from srcV2.producto2 import Producto
+from srcV2.calculos2 import calculadora
+from srcV2.excepciones2 import PrecioNoValidoError
 
-class Bebida:
-    #cada bebida tiene un nombre y un precio fijo (ya lleva el iva incluido)
+
+class Bebida(Producto):
+    #Bebida hereda de Producto
+    #criterio de precio: precio fijo de carta con el iva incluido, como en un bar
+    #(no se cocina, solo se compra y se vende, asi que no se calcula como la pizza)
     def __init__(self, nombre, precioFijo):
-        self.nombre = nombre
-        self.precioFijo = precioFijo
+        super().__init__(nombre)
+        if precioFijo < 0:
+            raise PrecioNoValidoError(precioFijo)
+        self._precioFijo = precioFijo
+
+    @property
+    def precioFijo(self):
+        return self._precioFijo
+
+    #sobrescribe el metodo de Producto: el precio de carta sin el iva
+    def precioSinIva(self, temporada=None):
+        return self._precioFijo / (1 + calculadora.gastos.iva)
 
     #la bebida cuesta lo mismo en todas las temporadas
     #recibe la temporada igual que la pizza, asi el carrito y el ticket
     #pueden pedir el precio de cualquier producto de la misma forma
     def precio(self, temporada=None):
-        return self.precioFijo
-
-    #nombre que sale en el ticket
-    def nombreTicket(self):
-        return self.nombre
+        return self._precioFijo
 
     def __str__(self):
         return f"{self.nombre} - {self.precioFijo:.2f} €"
