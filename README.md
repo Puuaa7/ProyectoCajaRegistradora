@@ -2,6 +2,26 @@
 
 Programa en Python que simula la caja registradora de una pizzería. Calcula el precio de las pizzas a partir de los ingredientes y los gastos del negocio, deja añadir pizzas y bebidas a un carrito, aplica ofertas y muestra un ticket con el IVA separado.
 
+## Autores y enlaces
+
+| Integrante | GitHub | Trello |
+| --- | --- | --- |
+| Alex Rodríguez | [alexrb29](https://github.com/alexrb29) | AR |
+| Pau Mas | [Puuaa7](https://github.com/Puuaa7) | PR |
+
+- **Memoria del proyecto:** [`Memoria – Caja registradora de una pizzería (v1 y v2).pdf`](<Memoria – Caja registradora de una pizzería (v1 y v2).pdf>)
+- **Tablero de la versión 1:** [Trello «Caja Registradora - Pizzería»](https://trello.com/b/nt1k8GgM/%F0%9F%8D%95-caja-registradora-pizzeria)
+- **Tablero de la versión 2:** [Trello «Caja Registradora - Pizzería (POO)»](https://trello.com/b/6aeb7b4b2dc99e7f30ca0fd1)
+
+## Requisitos e instalación
+
+Solo hace falta **Python 3** (lo hemos probado con Python 3.10 y 3.14). El programa usa únicamente la librería estándar, así que no hay que instalar nada con `pip`.
+
+```
+git clone https://github.com/Puuaa7/ProyectoCajaRegistradora.git
+cd ProyectoCajaRegistradora
+```
+
 ## Cómo se usa
 
 ```
@@ -21,6 +41,37 @@ Las dos versiones calculan los mismos precios de pizzas y bebidas. La diferencia
 
 - **Versión 1** (`srcV1/`): funciones sueltas y datos en diccionarios y listas.
 - **Versión 2** (`srcV2/`): clases y objetos. Cada cosa de la pizzería (ingrediente, pizza, bebida, carrito, ofertas, ticket, caja) es una clase con sus datos y sus métodos.
+
+Después se elige la temporada (baja, media o alta) y aparece el menú de la caja. El de la versión 2 es este; el de la versión 1 es igual, pero sin la opción 11:
+
+```
+----- PIZZERIA PYTHON (v2) -----
+Temporada: media - Dia: martes
+1. Ver pizzas
+2. Ver bebidas
+3. Ver ofertas
+4. Añadir producto
+5. Quitar producto
+6. Ver carrito
+7. Pagar y ver ticket
+8. Ver como se calcula el precio de una pizza
+9. Cambiar temporada
+10. Cambiar dia
+11. Añadir un menu (pizza + bebida o familiar)
+0. Salir
+```
+
+| Opción | Qué hace |
+| --- | --- |
+| 1 y 2 | Muestran la carta de pizzas (con su precio en la temporada elegida y sus ingredientes) y de bebidas. |
+| 3 | Muestra las ofertas y, si hay algo en el carrito, los descuentos que se le aplican. |
+| 4 y 5 | Añaden o quitan productos del carrito escribiendo su nombre (no importan las mayúsculas). |
+| 6 | Muestra el carrito con el total sin ofertas, los descuentos y el total con ofertas. |
+| 7 | Cobra: imprime el ticket y vacía el carrito. |
+| 8 | Explica paso a paso cómo se calcula el precio de una pizza. |
+| 9 y 10 | Cambian la temporada o el día (por ejemplo, para probar la oferta del martes). |
+| 11 | Solo en la versión 2: añade un menú pizza + bebida o un menú familiar. |
+| 0 | Sale del programa. |
 
 ## Estructura del proyecto
 
@@ -53,9 +104,14 @@ srcV2/                   -> versión 2 (clases)
   ofertas2.py            -> clase base Oferta, sus 5 subclases y la clase Ofertas
   ticket2.py             -> clase Ticket
   menu2.py               -> clase Caja (menú de la caja)
-tests/                   -> pruebas de las dos versiones
+tests/                   -> pruebas de las dos versiones (82 en total)
 docsV1/                  -> memoria y enunciado de la versión 1
-docsV2/                  -> notas de la versión 2
+docsV2/                  -> documentación de la versión 2
+  Memoria.md             -> diario de la versión 2 por días
+  Resumen_funciones_version2.md -> qué se hizo en cada rama
+  capturas_trello/       -> capturas del tablero de Trello de la versión 2
+Memoria – Caja registradora de una pizzería (v1 y v2).pdf -> memoria completa del proyecto
+Memoria – Caja registradora de una pizzería.pdf           -> memoria de la versión 1
 ```
 
 ## Versión 1: funciones
@@ -194,9 +250,11 @@ Así el IVA se calcula con el precio después de los descuentos.
 
 Las bebidas tienen un **precio fijo de carta con el IVA incluido**, como en cualquier bar (agua 1,20 €, refrescos 2 €, cerveza 2,50 €...). No las calculamos como las pizzas porque no se cocinan: solo se compran y se venden. En el ticket su IVA se separa igual que el de las pizzas.
 
-## Ejemplo de ejecución
+## Ejemplos de ejecución
 
-Pedido de 2 Margaritas, 1 Barbacoa y 2 colas un martes, en temporada media (versión 1; la versión 2 da el mismo total y muestra los importes siempre con 2 decimales):
+### Versión 1
+
+Pedido de 2 Margaritas, 1 Barbacoa y 2 colas un martes, en temporada media (la versión 2 da el mismo total y muestra los importes siempre con 2 decimales):
 
 ```
 PIZZERIA PYTHON
@@ -218,9 +276,31 @@ Total: 22.86 €
 Gracias por su compra.
 ```
 
+### Versión 2, con un menú
+
+Pedido de 2 Margaritas y un menú pizza + bebida (Barbacoa y agua) un martes, en temporada media. El menú sale con lo que lleva dentro, y su pizza no cuenta para el 2x1 ni para el descuento del martes porque el menú ya tiene su propio descuento:
+
+```
+PIZZERIA PYTHON
+
+Productos:
+- Pizza Margarita x2: 23.90 €
+- Menu pizza + bebida (Pizza Barbacoa, agua) x1: 14.32 €
+
+Descuentos:
+- 2x1: -11.95 €
+- Martes 20% pizzas: -2.39 €
+
+Base imponible: 21.71 €
+IVA: 2.17 €
+Total: 23.88 €
+
+Gracias por su compra.
+```
+
 ## Pruebas
 
-Las pruebas están en la carpeta `tests/`. Para lanzarlas todas desde la carpeta del proyecto:
+Las pruebas están en la carpeta `tests/` y usan `unittest`, de la librería estándar. Hay 82 y se lanzan todas desde la carpeta del proyecto con:
 
 ```
 python -m unittest discover -s tests -t .
