@@ -1,10 +1,10 @@
 import unittest
-from src.pizzas import pizzas, calcularCosteIngredientes, calcularPrecioPizza
-from src.ingredientes import ingredientes
-from src.temporada import obtenerPizzasEstimadas
-from src.calculos import separarIva
-from src.carrito import calcularTotalCarrito
-from src.ofertas import aplicarOferta
+from srcV1.pizzas import pizzas, calcularCosteIngredientes, calcularPrecioPizza
+from srcV1.ingredientes import ingredientes
+from srcV1.temporada import obtenerPizzasEstimadas
+from srcV1.calculos import separarIva
+from srcV1.carrito import calcularTotalCarrito
+from srcV1.ofertas import aplicarOferta
 
 class TestCaja(unittest.TestCase):
     def test_hay_20_pizzas(self):
@@ -23,7 +23,9 @@ class TestCaja(unittest.TestCase):
     def test_temporada(self):
         self.assertEqual(obtenerPizzasEstimadas("baja"), 600)
         self.assertEqual(obtenerPizzasEstimadas("alta"), 1500)
-        self.assertEqual(obtenerPizzasEstimadas("otra"), 1000)
+        #una temporada que no existe da error
+        with self.assertRaises(ValueError):
+            obtenerPizzasEstimadas("otra")
 
     def test_separar_iva(self):
         base, importe_iva = separarIva(11.00)
